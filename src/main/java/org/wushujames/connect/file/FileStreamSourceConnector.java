@@ -21,6 +21,9 @@ import org.apache.kafka.common.utils.AppInfoParser;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceConnector;
+import org.apache.kafka.common.config.Config;
+import org.apache.kafka.common.config.ConfigDef;
+import org.apache.kafka.common.config.ConfigValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +54,18 @@ public class FileStreamSourceConnector extends SourceConnector {
             throw new ConnectException("FileStreamSourceConnector configuration must include 'topic' setting");
         if (topic.contains(","))
             throw new ConnectException("FileStreamSourceConnector should only have a single topic when used as a source.");
+    }
+
+    @Override
+    public ConfigDef config() {
+        return new ConfigDef();
+    }
+
+    @Override
+    public Config validate(Map<String, String> connectorConfigs) {
+        ConfigDef configDef = config();
+        List<ConfigValue> configValues = configDef.validate(connectorConfigs);
+        return new Config(configValues);
     }
 
     @Override
