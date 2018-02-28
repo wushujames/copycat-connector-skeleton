@@ -20,6 +20,9 @@ package org.wushujames.connect.file;
 import org.apache.kafka.common.utils.AppInfoParser;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.sink.SinkConnector;
+import org.apache.kafka.common.config.Config;
+import org.apache.kafka.common.config.ConfigDef;
+import org.apache.kafka.common.config.ConfigValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +46,18 @@ public class FileStreamSinkConnector extends SinkConnector {
     @Override
     public void start(Map<String, String> props) {
         filename = props.get(FILE_CONFIG);
+    }
+
+    @Override
+    public ConfigDef config() {
+        return new ConfigDef();
+    }
+
+    @Override
+    public Config validate(Map<String, String> connectorConfigs) {
+        ConfigDef configDef = config();
+        List<ConfigValue> configValues = configDef.validate(connectorConfigs);
+        return new Config(configValues);
     }
 
     @Override
